@@ -2,6 +2,7 @@ import type { ConfigWithExtends } from "typescript-eslint";
 import globals from "globals";
 import { javascriptConfig } from "./configs/javascript";
 import { typescriptConfig } from "./configs/typescript";
+import { unicornConfig } from "./configs/unicorn";
 import { prettierConfig } from "./configs/prettier";
 
 type Platform = "web" | "node";
@@ -10,6 +11,7 @@ interface Params {
   platform: Platform;
   configs?: {
     typescript?: boolean | { tsconfigRootDir?: string };
+    unicorn?: boolean;
   };
   extends?: ConfigWithExtends[];
 }
@@ -17,6 +19,7 @@ interface Params {
 export function createConfig(params: Params): ConfigWithExtends[] {
   const configs: Required<Params["configs"]> = {
     typescript: true,
+    unicorn: true,
     ...params.configs,
   };
 
@@ -27,6 +30,11 @@ export function createConfig(params: Params): ConfigWithExtends[] {
     final.push(
       ...typescriptConfig(typeof configs.typescript !== "boolean" ? configs.typescript : {}),
     );
+  }
+
+  // Unicorn
+  if (configs.unicorn) {
+    final.push(...unicornConfig());
   }
 
   // Prettier
