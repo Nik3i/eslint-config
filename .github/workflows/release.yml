@@ -1,0 +1,53 @@
+name: Release and Publish to npm
+
+# 1. This workflow is triggered manually
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Semantic Release
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # To push new version tag and commit changes
+      issues: write # To comment on issues and PRs
+      pull-requests: write # To comment on issues and PRs
+      id-token: write # To use OIDC for npm (if not using NPM_TOKEN)
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          # This is required to push changes back to the repo
+          persist-credentials: false
+          # important for semantic-release to analyze commits
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "npm"
+          # This line configures npm to use OIDC for auth
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # (Optional) Add your build and test steps here
+      # - name: Build
+      #   run: npm run build
+      # - name: Test
+      #   run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Run semantic-release
+        run: npm run release
+        env:
+          # The GITHUB_TOKEN is automatically provided by Actions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # NO NPM_TOKEN IS NEEDED!
