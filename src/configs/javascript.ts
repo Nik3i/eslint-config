@@ -15,8 +15,8 @@ export function javascriptConfig(): Config[] {
       files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
       rules: {
         "array-callback-return": ["error"],
-        curly: ["error", "all"],
-        eqeqeq: ["error"],
+        curly: ["warn", "all"],
+        eqeqeq: ["warn"],
         "no-unused-vars": [
           "error",
           {
