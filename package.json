@@ -43,6 +43,10 @@
   "peerDependencies": {
     "eslint": "^10.0.0"
   },
+  "dependencies": {
+    "@eslint/js": "^10.0.1",
+    "globals": "^17.3.0"
+  },
   "devDependencies": {
     "@nik3i/prettier-config": "^1.0.0",
     "@nik3i/tsconfig": "^1.0.0",
